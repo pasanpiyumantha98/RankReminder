@@ -1,6 +1,10 @@
 
 import { MongoClient, ServerApiVersion }from 'mongodb';
-const uri = "mongodb+srv://pasanpiyumantha98_db_user:u8YUYfmHvi7DnmYb@clusterrankreminder.ynj7q4a.mongodb.net/?retryWrites=true&w=majority&appName=ClusterRankReminder";
+import dns from "node:dns";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
+
+const uri = "mongodb+srv://pasanpiyumantha98_db_user:ofRC6ikOUBpbUwwN@cluster0.kzo6buv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
