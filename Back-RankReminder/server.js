@@ -1,5 +1,14 @@
 import express from 'express';
 import fs from 'fs';
+import { MongoClient } from 'mongodb';
+
+const uri = "mongodb+srv://pasanpiyumantha98_db_user:u8YUYfmHvi7DnmYb@clusterrankreminder.ynj7q4a.mongodb.net/?retryWrites=true&w=majority&appName=ClusterRankReminder"; 
+const client = new MongoClient(uri);
+
+await client.connect();
+const db = client.db("RankReminder");
+
+console.log("Connected to MongoDB");
 
 
 const app = express();
@@ -38,6 +47,28 @@ app.get('/api/users', (req, res) => {
             res.send('User added successfully');
 
     })
+
+});
+
+
+app.post('/api/url/insert', (req,res) =>{
+
+
+    const url = req.body.url;
+    const location = req.body.location;
+    const keyword = req.body.keyword;
+
+    async function run() {
+
+        await db.collection("Url").insertOne({id:1, url: url, location: location, keyword: keyword});
+        res.send('URL inserted successfully');
+
+
+    }
+
+    run();
+
+
 
 });
 
