@@ -2,7 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import { MongoClient } from 'mongodb';
 
-const uri = "mongodb+srv://pasanpiyumantha98_db_user:u8YUYfmHvi7DnmYb@clusterrankreminder.ynj7q4a.mongodb.net/?retryWrites=true&w=majority&appName=ClusterRankReminder"; 
+const uri = "mongodb+srv://pasanpiyumantha98_db_user:EJHYVA4XOAqtOTNk@cluster0.kzo6buv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const client = new MongoClient(uri);
 
 await client.connect();
@@ -60,7 +60,7 @@ app.post('/api/url/insert', (req,res) =>{
 
     async function run() {
 
-        await db.collection("Url").insertOne({id:1, url: url, location: location, keyword: keyword});
+        await db.collection("Urls").insertOne({id:1, url: url, location: location, keyword: keyword});
         res.send('URL inserted successfully');
 
 
