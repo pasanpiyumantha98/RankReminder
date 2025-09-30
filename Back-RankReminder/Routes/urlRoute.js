@@ -5,6 +5,7 @@ const db = await getDb();
 const router = express.Router();
 
 
+// Inserting URLs
 router.post('/insert', (req, res) => {
 
     const uid = req.body.uid;
@@ -33,6 +34,23 @@ router.post('/insert', (req, res) => {
 
     insert();
 
+});
+
+// Deleting URLs
+router.post('/delete', async (req, res) => {
+    const { id } = req.body;
+    if (!id) {
+        return res.status(400).send('Missing URL id');
+    }
+    try {
+        const result = await db.collection("Urls").deleteOne({ id: id });
+        if (result.deletedCount === 0) {
+            return res.status(404).send('URL not found');
+        }
+        res.send('URL deleted successfully');
+    } catch (err) {
+        res.status(500).send('Error deleting URL');
+    }
 });
 
 export default router;
