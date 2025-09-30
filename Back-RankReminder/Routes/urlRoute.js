@@ -83,13 +83,12 @@ async function makeRequest() {
   try {
     const response = await axios.request(config);
 
-    const serp = response.data.organic;
+    const serp = response.data.organic; // Dealing with the organic components of the search results array
 
-    let result =0;
 
-    result = serp.find(item => item.link == url);
+    let result = serp.find(item => item.link == url);
 
-    res.send(String(result?.position ?? 1011) );
+    res.send(String(result?.position ?? 9999) ); //return 9999 if not found
 
     }
   catch (error) {
