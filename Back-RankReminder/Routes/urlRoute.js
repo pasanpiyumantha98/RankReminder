@@ -1,5 +1,6 @@
 import express from 'express';
 import getDb from '../db.js';
+import axios from 'axios';
 
 const db = await getDb();
 const router = express.Router();
@@ -52,5 +53,59 @@ router.post('/delete', async (req, res) => {
         res.status(500).send('Error deleting URL');
     }
 });
+
+
+
+// Checking Rank Manually After Entering Details
+router.post('/rank/check/manual', async (req, res) => {
+
+    let query = req.body.query;
+    let location = req.body.location;
+    const url = req.body.url;
+
+    let data = JSON.stringify({
+    q: query,
+    gl: location
+});
+
+let config = {
+  method: 'post',
+  maxBodyLength: Infinity,
+  url: 'https://google.serper.dev/search',
+  headers: { 
+    'X-API-KEY': 'dc224c31193c095ccf61310ce371aba75df40e47', 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+async function makeRequest() {
+  try {
+    const response = await axios.request(config);
+
+    const serp = response.data.organic;
+
+    let result =0;
+
+    result = serp.find(item => item.link == url);
+
+    res.send(String(result?.position ?? 1011) );
+
+    }
+  catch (error) {
+    res.send("error");
+  }
+    
+    
+  
+}
+
+makeRequest();
+
+
+
+
+})
+
 
 export default router;
