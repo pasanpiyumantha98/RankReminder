@@ -1,12 +1,9 @@
 import express from 'express';
 import fs from 'fs';
-import { MongoClient } from 'mongodb';
 
-const uri = "mongodb+srv://pasanpiyumantha98_db_user:EJHYVA4XOAqtOTNk@cluster0.kzo6buv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri);
+import getDb from './db.js';
 
-await client.connect();
-const db = client.db("RankReminder");
+const db = await getDb();
 
 console.log("Connected to MongoDB");
 
@@ -54,13 +51,22 @@ app.get('/api/users', (req, res) => {
 app.post('/api/url/insert', (req,res) =>{
 
 
+    
+    const uid = req.body.uid;
     const url = req.body.url;
     const location = req.body.location;
     const keyword = req.body.keyword;
 
+
+
+
     async function run() {
 
-        await db.collection("Urls").insertOne({id:1, url: url, location: location, keyword: keyword});
+        const lastUrl = await db.collection("Urls").find().sort({ id: -1 }).limit(1).toArray();
+
+        const id = lastUrl[0].id + 1 || 1; // If no documents, start with id 1
+
+        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, keyword: keyword});
         res.send('URL inserted successfully');
 
 
