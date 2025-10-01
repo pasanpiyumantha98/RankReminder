@@ -56,55 +56,118 @@ router.post('/delete', async (req, res) => {
 
 
 
-// Checking Rank Manually After Entering Details
-router.post('/rank/check/manual', async (req, res) => {
 
-    let query = req.body.query;
-    let location = req.body.location;
-    const url = req.body.url;
 
-    let data = JSON.stringify({
-    q: query,
-    gl: location
+
+router.post("/rank/check/manual", async (req, res) => {
+  try {
+    const query = String(req.body.query || "").trim();
+    const gl = String(req.body.location || "us").toLowerCase(); // e.g. "lk"
+    const targetUrl = String(req.body.url || "").trim();
+
+    if (!query || !targetUrl) {
+      return res.status(400).json({ error: "query and url are required" });
+    }
+
+    const PAGE_SIZE = 10;     // Serper usually returns 10 organic results
+    const MAX_RESULTS = 90;   // search up to the top 90 (pages 1..9)
+    const USE_PAGE_FALLBACK = true; // try {page:N} if {start:offset} yields empty
+
+    // Build a lenient “key” for equality:
+    // - protocol-agnostic
+    // - strips "www."
+    // - strips query + hash
+    // - normalizes trailing slash
+    // Then compare host + path.
+    const toKey = (u) => {
+      try {
+        const url = new URL(u);
+        let host = url.hostname.toLowerCase();
+        if (host.startsWith("www.")) host = host.slice(4);
+        let path = url.pathname || "/";
+        if (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
+        return `${host}${path}`;
+      } catch {
+        return String(u).trim().toLowerCase();
+      }
+    };
+
+    const targetKey = toKey(targetUrl);
+
+    // Allow matches where either key is a prefix of the other (handles harmless extras)
+    const isMatch = (candidateLink) => {
+      const k = toKey(candidateLink);
+      if (k === targetKey) return true;
+      return k.startsWith(targetKey) || targetKey.startsWith(k);
+    };
+
+    const fetchPage = async ({ start, page }) => {
+      const body = {
+        q: query,
+        gl: gl,
+        hl: "en",
+        num: String(PAGE_SIZE),
+      };
+      if (typeof start === "number") body.start = String(start); // 0,10,20...
+      if (typeof page === "number") body.page = String(page);    // 1,2,3...
+
+      const resp = await axios.post("https://google.serper.dev/search", body, {
+        headers: {
+          "X-API-KEY": process.env.SERPER_API_KEY || "dc224c31193c095ccf61310ce371aba75df40e47",
+          "Content-Type": "application/json",
+        },
+        maxBodyLength: Infinity,
+      });
+
+      const serp = Array.isArray(resp?.data?.organic) ? resp.data.organic : [];
+      return serp;
+    };
+
+    for (let start = 0; start < MAX_RESULTS; start += PAGE_SIZE) {
+      // Primary attempt: offset-based pagination
+      let serp = await fetchPage({ start });
+
+      // Fallback: some plans/endpoints prefer page-based pagination (1-based)
+      if (USE_PAGE_FALLBACK && (!serp || serp.length === 0)) {
+        const page = Math.floor(start / PAGE_SIZE) + 1;
+        serp = await fetchPage({ page });
+      }
+
+      if (!serp || serp.length === 0) break; // no more results
+
+      // DEBUG: uncomment to see each page’s links
+      // console.log("PAGE", { start, links: serp.map(s => s.link) });
+
+      // First try robust key match
+      let idx = serp.findIndex(item => isMatch(item.link));
+      // Last-chance hard equality
+      if (idx === -1) idx = serp.findIndex(item => item.link === targetUrl);
+
+      if (idx !== -1) {
+        const item = serp[idx];
+        const absolute = Number.isFinite(item?.position) ? item.position : null;
+        const computed = start + idx + 1; // 1-based across pages
+        const rank = absolute ?? computed;
+        return res.json({
+          found: true,
+          rank,
+          page: Math.floor((rank - 1) / PAGE_SIZE) + 1,
+          link: item.link,
+          title: item.title,
+        });
+      }
+
+      // (optional) polite delay to avoid rate limits
+      await new Promise(r => setTimeout(r, 150));
+    }
+
+    return res.json({ found: false, message: `Not in Top ${MAX_RESULTS}`, rank: null });
+  } catch (err) {
+    console.error(err?.response?.data || err.message);
+    return res.status(500).json({ error: "Failed to check rank" });
+  }
 });
 
-let config = {
-  method: 'post',
-  maxBodyLength: Infinity,
-  url: 'https://google.serper.dev/search',
-  headers: { 
-    'X-API-KEY': 'dc224c31193c095ccf61310ce371aba75df40e47', 
-    'Content-Type': 'application/json'
-  },
-  data : data
-};
-
-async function makeRequest() {
-  try {
-    const response = await axios.request(config);
-
-    const serp = response.data.organic; // Dealing with the organic components of the search results array
-
-
-    let result = serp.find(item => item.link == url);
-
-    res.send(String(result?.position ?? 9999) ); //return 9999 if not found
-
-    }
-  catch (error) {
-    res.send("error");
-  }
-    
-    
-  
-}
-
-makeRequest();
-
-
-
-
-})
 
 
 export default router;
