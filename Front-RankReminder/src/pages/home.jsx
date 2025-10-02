@@ -1,6 +1,52 @@
 import Header from "../components/header";
+import {  useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 function Home() {
+
+
+
+  const [url, setUrl] = useState("");
+  const [query, setQuery] = useState("");
+  const [location, setLocation] = useState("");   
+  const [rank,setRank] = useState("1");
+  const[title,setTitle] = useState("My Website");
+  const[site,setSite] = useState("www.mywebsite.com");
+
+    const {data,isFetching,refetch} = useQuery({
+        queryKey:['RankCheckManual', { url:url, query:query, location:location }],
+        queryFn: async () => {
+          const res = await axios.post('http://localhost:3000/api/url/rank/check/manual', {url:url, query:query, location:location});
+          return res.data;},
+          enabled: false
+
+
+      });
+
+  async function rankCheckManual(e){
+
+      e.preventDefault();
+
+    if(url === "" || query === "" || location === ""){
+      toast.error("Please fill all the fields");
+      return;
+    } else{
+
+  const { data: fresh } = await refetch();   // ✅ fresh data here
+  console.log("fresh", fresh);
+  setRank(fresh.rank);
+  setSite(fresh.link);
+  setTitle(fresh.title);
+
+    }
+    
+
+  }
+
+
   return (
     <div>
 
@@ -22,15 +68,15 @@ function Home() {
         
         
         <label for="url" class="text-xl mr-10">URL </label>
-        <input id="url" class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="https://example.com" required />
+        <input id="url" value={url} onChange={e =>setUrl(e.target.value)} class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="https://example.com" required />
 
          <br/>
         <label for="url" class="text-xl ">Keyword </label>
-         <input id="url" class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="GTA 6, Mods, Serp...." required />
+         <input id="url" value={query} onChange={e => setQuery(e.target.value)} class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="GTA 6, Mods, Serp...." required />
 
          <br/>
         <label for="url" class="text-xl ">Location </label>
-        <input id="url" class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="lk, us" required />
+        <input id="url" value={location} onChange={e=> setLocation(e.target.value)} class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="lk, us" required />
 
         <br/>
          
@@ -40,7 +86,7 @@ function Home() {
        </div>
 
        <div class=" col-span-1 bg-gray-300 ">
-      <button class=" mt-10 bg-black rounded-3xl hover:bg-amber-500 text-amber-50 p-2 text-[20px] font-mono content-center" type="submit">Find > </button>
+      <button onClick={rankCheckManual} class=" mt-10 bg-black rounded-3xl hover:bg-amber-500 text-amber-50 p-2 text-[20px] font-mono content-center" type="submit">Find  </button>
 
        </div>
 
@@ -51,11 +97,11 @@ function Home() {
 
       <div class="col-span-2 bg-gray-200 border-4 border-black p-3 rounded-2xl">
 
-     <h2 class="text-3xl text-center mt-2 mb-10">Your Rank on Google is 1#</h2>
+     <h2 class="text-3xl text-center mt-2 mb-10">Your Rank on Google is {rank}#</h2>
 
-       <p class=" mb-1 font-bold text-center">GTA 6 Mods</p>
+       <p class=" mb-1 font-bold text-center">{title}</p>
 
-       <p class=" mb-1 text-center">www.gta6modding.com</p>
+       <p class=" mb-1 text-center">{site}</p>
 
 
       </div>
