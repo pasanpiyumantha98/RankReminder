@@ -12,7 +12,9 @@ router.post('/insert', (req, res) => {
     const uid = req.body.uid;
     const url = req.body.url;
     const location = req.body.location;
-    const keyword = req.body.keyword;
+    const query = req.body.query;
+
+    console.log("recieve", uid, url, location, query);
 
     async function insert() {
 
@@ -28,8 +30,8 @@ router.post('/insert', (req, res) => {
 
         
 
-        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, keyword: keyword});
-        res.send('URL inserted successfully');
+        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query});
+        res.send('success');
 
     }
 
@@ -52,6 +54,27 @@ router.post('/delete', async (req, res) => {
     } catch (err) {
         res.status(500).send('Error deleting URL');
     }
+});
+
+router.get('/findall/:uid', async (req, res) => {
+
+  const uid = req.params.uid;
+
+  try{
+
+    const response = await db.collection("Urls").find({uid:uid}).toArray();
+    
+    if(response.length === 0){
+      return res.status(404).send('No URLs found for this user');
+    }
+
+    res.json(response);
+
+  } catch(err){
+    res.status(500).send('Error fetching URLs');
+  }
+
+
 });
 
 
