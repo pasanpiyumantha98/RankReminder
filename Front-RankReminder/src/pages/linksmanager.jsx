@@ -47,7 +47,7 @@ function LinksManager() {
     },
     onSuccess: () => {
       toast.success("URL Deleted Successfully");
-      urlsRefetch();
+      urlsRefetch(); // Reftching urls in the table upon deleting a URL
     }
 
    });
