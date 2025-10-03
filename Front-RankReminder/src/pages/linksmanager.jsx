@@ -108,8 +108,26 @@ async function registerUrl(e){
 
          <br/>
         <label for="url" class="text-xl mr-5">Country </label>
-        <input value={location} onChange={e=> setLocation(e.target.value)} id="url" class="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="lk,us,uk...." required />
-
+        <select 
+          id="country"
+  name="country"
+  value={location}
+  onChange={(e) => setLocation(e.target.value)}
+  className="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"
+  required
+>
+  <option value="">Select country</option>
+  <option value="lk">lk (Sri Lanka)</option>
+  <option value="us">us (United States)</option>
+  <option value="uk">uk (United Kingdom)</option>
+  <option value="ca">ca (Canada)</option>
+  <option value="in">in (India)</option>
+  <option value="au">au (Australia)</option>
+  <option value="de">de (Germany)</option>
+  <option value="fr">fr (France)</option>
+  <option value="jp">jp (Japan)</option>
+  <option value="cn">cn (China)</option>
+</select>
         <br/>
          <button onClick={registerUrl} class="m-3 pt-3 bg-black rounded-2xl hover:bg-amber-500 text-amber-50 p-2 text-[15px] font-mono content-center" type="submit">Insert</button>
         

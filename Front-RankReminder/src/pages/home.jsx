@@ -76,8 +76,26 @@ function Home() {
 
          <br/>
         <label for="url" class="text-xl ">Location </label>
-        <input id="url" value={location} onChange={e=> setLocation(e.target.value)} class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="lk, us" required />
-
+        <select 
+          id="country"
+  name="country"
+  value={location}
+  onChange={(e) => setLocation(e.target.value)}
+  className="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"
+  required
+>
+  <option value="">Select country</option>
+  <option value="lk">lk (Sri Lanka)</option>
+  <option value="us">us (United States)</option>
+  <option value="uk">uk (United Kingdom)</option>
+  <option value="ca">ca (Canada)</option>
+  <option value="in">in (India)</option>
+  <option value="au">au (Australia)</option>
+  <option value="de">de (Germany)</option>
+  <option value="fr">fr (France)</option>
+  <option value="jp">jp (Japan)</option>
+  <option value="cn">cn (China)</option>
+</select>
         <br/>
          
         
