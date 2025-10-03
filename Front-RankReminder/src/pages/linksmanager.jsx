@@ -73,7 +73,7 @@ async function registerUrl(e){
         setUrl("");
         setQuery("");
         setLocation("");
-        urlsRefetch();
+        urlsRefetch();  // Upon registering new URL, refetch the URLs list
 
       }
 
