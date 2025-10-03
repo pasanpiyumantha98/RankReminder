@@ -2,7 +2,7 @@ import Header from "../components/header";
 import {  useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 
@@ -12,7 +12,7 @@ function LinksManager() {
   const [url, setUrl] = useState("");
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");   
-  const[uid,setUid] = useState("22");  // Temporary UID for testing purpose
+  const[uid,setUid] = useState("12345");  // Temporary UID for testing purpose
   const [urlList,setUrlList] = useState([]);
   
 
@@ -37,6 +37,20 @@ function LinksManager() {
       return res.data;},
       
     });
+
+   const deleteMutation = useMutation({
+    mutationFn: async (id) =>{
+
+       await axios.delete(`http://localhost:3000/api/url/delete/${id}`);
+      
+
+    },
+    onSuccess: () => {
+      toast.success("URL Deleted Successfully");
+      urlsRefetch();
+    }
+
+   });
 
 
    
@@ -65,6 +79,9 @@ async function registerUrl(e){
 
 
 }
+
+
+
 
 
   return (
@@ -124,7 +141,7 @@ async function registerUrl(e){
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
      
-        { urlFetching ? <p class="text-center text-lg font-semibold">Loading...</p> :
+        { urlFetching ? <p class="text-center text-lg ">Loading...</p> : urlData && urlData.length>0 ? (
         urlData.map((item,index)=>(
      <tr key={index}>
         <td class="px-6 py-4 whitespace-nowrap text-blue-600">{index+1}</td>
@@ -133,11 +150,13 @@ async function registerUrl(e){
         <td class="px-6 py-4 whitespace-nowrap">{item.location.toUpperCase()}</td>
         <td class="px-6 py-4 whitespace-nowrap text-center">
           
-          <button class="ml-2 px-3 py-1 bg-red-400 text-white rounded hover:bg-red-300">Remove</button>
+          <button class="ml-2 px-3 py-1 bg-red-400 text-white rounded hover:bg-red-300" onClick={()=>{deleteMutation.mutate(item.id)}}>Remove</button>
         </td>
       </tr>
 
         ))
+
+      ) : <p class="text-center text-lg ">No URLs Found</p>
 
         }
        
