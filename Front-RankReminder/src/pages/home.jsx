@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import UrlListWithRanks from "../components/urlListWithRanks";
 
 function Home() {
 
@@ -54,7 +55,12 @@ function Home() {
 
      <h1 class="font-bold text-4xl mt-7 text-center">My Dashboard</h1>
 
-     <div class="grid grid-cols-5 m-10 p-10 space-x-5">
+     <h2 class="text-2xl font-bold text-center mt-20">Rank Checker</h2>
+
+
+     <div class="grid grid-cols-6 m-5 p-10 space-x-5">
+
+      <div class="col-span-1"></div>
 
       <div class="col-span-2 bg-gray-300 border-4 border-black p-3 rounded-2xl">
 
@@ -123,11 +129,14 @@ function Home() {
 
 
       </div>
+       <div class="col-span-1"></div>
 
      
 
 
     </div>
+
+    <UrlListWithRanks/>
      
     </div>
   );

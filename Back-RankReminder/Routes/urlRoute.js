@@ -32,7 +32,7 @@ router.post('/insert', (req, res) => {
 
         
 
-        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query});
+        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query, lastChecked: "NA", rank: "NA"});
         res.send('success');
 
     }
