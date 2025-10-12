@@ -27,6 +27,8 @@ function Home() {
 
       });
 
+  
+
   async function rankCheckManual(e){
 
       e.preventDefault();
