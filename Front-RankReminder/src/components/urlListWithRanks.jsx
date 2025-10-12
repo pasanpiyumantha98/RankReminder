@@ -13,6 +13,7 @@ function UrlListWithRanks() {
         <div class="gris grid-cols-5">
         <div class="col-span-1"></div>
 
+        
         <div class="col-span-3">
 
         <div class="overflow-x-auto">
@@ -21,7 +22,12 @@ function UrlListWithRanks() {
         </div>
 
         </div>
+        
+        
         <div class="col-span-1"></div>
+        </div>
+
+        </div>
     );
 }
 
