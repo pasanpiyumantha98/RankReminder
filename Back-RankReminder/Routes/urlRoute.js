@@ -195,4 +195,31 @@ router.post("/rank/check/manual", async (req, res) => {
 
 
 
+router.get('/rank/check/home/:uid', async (req, res) => {
+
+
+const uid = req.params.uid;  
+
+const urls = await db.collection("Urls").find({uid:uid}).toArray();
+
+if(urls.length === 0){
+{
+  return res.status(404).send('No URLs found for this user');
+}
+
+
+  // If all success, execute below block
+
+  const date = new Date();
+
+  const response = await db.collection("Urls").updateMany({uid:uid}, { $set: { lastChecked: date.toLocaleString() } });
+
+  res.send('Rank Check Initiated Successfully');
+
+  //
+
+});
+
+
+
 export default router;

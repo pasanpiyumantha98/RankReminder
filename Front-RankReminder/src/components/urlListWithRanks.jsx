@@ -28,6 +28,18 @@ function UrlListWithRanks() {
       }); 
 
 
+      async function checkRanks(e){
+        e.preventDefault(); 
+
+           const res = await axios.get('http://localhost:3000/api/url/rank/check/home');
+           if(res.status === 200){
+           window.alert("Rank Check Initiated Successfully");
+           } 
+
+
+      }
+
+
     return (
         <div>
             <h2 class="text-2xl font-black text-center m-10">Your Rankings</h2>
