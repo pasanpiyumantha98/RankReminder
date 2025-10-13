@@ -35,6 +35,7 @@ function UrlListWithRanks() {
           queryFn: async () => {
               const res = await axios.get('http://localhost:3000/api/url/rank/check/home/12345');
                window.location.reload();
+               
           },
           enabled: false
 
@@ -77,6 +78,7 @@ function UrlListWithRanks() {
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Keyword</th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Location</th>
         <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Rank</th>
+         <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Change</th>
          </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -87,7 +89,8 @@ function UrlListWithRanks() {
         <td class="px-6 py-4 whitespace-nowrap text-blue-600">{item.url}</td>
         <td class="px-6 py-4 whitespace-nowrap">{item.query}</td>
         <td class="px-6 py-4 whitespace-nowrap">{item.location.toUpperCase()}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-center">{item.rank}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">{item.nrank}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">{item.nrank>item.prank?"Down":item.nrank==item.prank?"No Change":item.nrank<item.prank?"Up":"NA"}</td>
       </tr> 
         
          ))) : <p class="text-center text-lg ">No URLs Found</p>

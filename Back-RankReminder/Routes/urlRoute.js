@@ -32,7 +32,7 @@ router.post('/insert', (req, res) => {
 
         
 
-        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query, lastChecked: "NA", rank: "NA"});
+        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query, lastChecked: "NA", nrank: 99, prank:99});
         res.send('success');
 
     }
@@ -261,18 +261,23 @@ for (const urlObj of urls) {
       rank = item.position || idx + 1; // if position not given, compute manually
     }
 
+    const doc = await db.collection("Urls").findOne({ id: id });
+    
+    const prank = doc?.nrank || "NA"; // previous rank
+
     // Update this single URL’s rank and lastChecked
     await db.collection("Urls").updateOne(
       { id: id },
       {
         $set: {
-          rank: rank,
+          prank: prank,
+          nrank: rank,
           lastChecked: new Date().toLocaleString(),
         },
       }
     );
 
-    console.log(`✅ Updated ${targetUrl} → rank: ${rank}`);
+    return res.json({ message: `Rank updated for URL ID ${id}`, id, url: targetUrl, rank });
   } catch (err) {
     console.error(`❌ Error checking rank for ${targetUrl}:`, err.message);
   }
