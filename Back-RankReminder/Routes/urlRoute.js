@@ -32,7 +32,7 @@ router.post('/insert', (req, res) => {
 
         
 
-        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query, lastChecked: "NA", nrank: 99, prank:99});
+        await db.collection("Urls").insertOne({id:id, uid:uid, url: url, location: location, query: query, lastChecked: "NA", nrank: "NA", prank:"NA"});
         res.send('success');
 
     }
@@ -277,7 +277,7 @@ for (const urlObj of urls) {
       }
     );
 
-    return res.json({ message: `Rank updated for URL ID ${id}`, id, url: targetUrl, rank });
+   
   } catch (err) {
     console.error(`❌ Error checking rank for ${targetUrl}:`, err.message);
   }
@@ -286,7 +286,7 @@ for (const urlObj of urls) {
   await new Promise((resolve) => setTimeout(resolve, 150));
 }
 
-  
+   return res.json( "Rankings Updated" );
 
 });
 
