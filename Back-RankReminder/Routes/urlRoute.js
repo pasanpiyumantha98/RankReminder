@@ -202,11 +202,84 @@ const uid = req.params.uid;
 
 const urls = await db.collection("Urls").find({uid:uid}).toArray();
 
-if(urls.length === 0){
+if(urls.length === 0)
 {
   return res.status(404).send('No URLs found for this user');
 }
 
+for (const urlObj of urls) {
+  const query = String(urlObj.query || "").trim();
+  const gl = String(urlObj.location || "us").toLowerCase();
+  const targetUrl = String(urlObj.url || "").trim();
+  const id = urlObj.id;
+
+  try {
+    // Call the same Serper API you use in /rank/check/manual
+    const body = {
+      q: query,
+      gl: gl,
+      hl: "en",
+      num: "10",
+    };
+
+    const resp = await axios.post("https://google.serper.dev/search", body, {
+      headers: {
+        "X-API-KEY": process.env.SERPER_API_KEY || "dc224c31193c095ccf61310ce371aba75df40e47",
+        "Content-Type": "application/json",
+      },
+    });
+
+    const serp = Array.isArray(resp?.data?.organic) ? resp.data.organic : [];
+
+    // Function to normalize URLs for comparison
+    const toKey = (u) => {
+      try {
+        const url = new URL(u);
+        let host = url.hostname.toLowerCase();
+        if (host.startsWith("www.")) host = host.slice(4);
+        let path = url.pathname || "/";
+        if (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
+        return `${host}${path}`;
+      } catch {
+        return String(u).trim().toLowerCase();
+      }
+    };
+
+    const targetKey = toKey(targetUrl);
+    const isMatch = (candidate) => {
+      const k = toKey(candidate);
+      return k === targetKey || k.startsWith(targetKey) || targetKey.startsWith(k);
+    };
+
+    // Find the rank
+    let idx = serp.findIndex(item => isMatch(item.link));
+    if (idx === -1) idx = serp.findIndex(item => item.link === targetUrl);
+
+    let rank = "NA";
+    if (idx !== -1) {
+      const item = serp[idx];
+      rank = item.position || idx + 1; // if position not given, compute manually
+    }
+
+    // Update this single URL’s rank and lastChecked
+    await db.collection("Urls").updateOne(
+      { id: id },
+      {
+        $set: {
+          rank: rank,
+          lastChecked: new Date().toLocaleString(),
+        },
+      }
+    );
+
+    console.log(`✅ Updated ${targetUrl} → rank: ${rank}`);
+  } catch (err) {
+    console.error(`❌ Error checking rank for ${targetUrl}:`, err.message);
+  }
+
+  // Optional delay to prevent hitting rate limits
+  await new Promise((resolve) => setTimeout(resolve, 150));
+}
 
   // If all success, execute below block
 
