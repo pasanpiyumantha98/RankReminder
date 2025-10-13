@@ -281,15 +281,7 @@ for (const urlObj of urls) {
   await new Promise((resolve) => setTimeout(resolve, 150));
 }
 
-  // If all success, execute below block
-
-  const date = new Date();
-
-  const response = await db.collection("Urls").updateMany({uid:uid}, { $set: { lastChecked: date.toLocaleString() } });
-
-  res.send('Rank Check Initiated Successfully');
-
-  //
+  
 
 });
 

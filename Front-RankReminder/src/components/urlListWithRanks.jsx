@@ -28,16 +28,25 @@ function UrlListWithRanks() {
       }); 
 
 
-      async function checkRanks(e){
-        e.preventDefault(); 
+     
 
-           const res = await axios.get('http://localhost:3000/api/url/rank/check/home');
-           if(res.status === 200){
-           window.alert("Rank Check Initiated Successfully");
-           } 
+        const {data : refreshData, isFetching : refreshFetching, refetch : refetchURL} = useQuery({
+          queryKey:['RankCheckHome'],
+          queryFn: async () => {
+              const res = await axios.get('http://localhost:3000/api/url/rank/check/home/12345');
+               window.location.reload();
+          },
+          enabled: false
+
+        });
+
+           
+
+          
+           
 
 
-      }
+     
 
 
     return (
@@ -46,9 +55,10 @@ function UrlListWithRanks() {
 
         <div class="flex justify-center">
             <p class="text-center ">Last Checked - </p> {urlFetching? <p classs="mt-3">Loading</p> : <p classs="mt-5"> {urlData[0].lastChecked}</p>} 
-            <button  class=" bg-black rounded-3xl hover:bg-amber-500 text-amber-50 p-1 text-[15px] font-mono content-center ml-5" type="submit">Check  </button>
-        </div>
+            <button onClick={refetchURL} class=" bg-black rounded-3xl hover:bg-amber-500 text-amber-50 p-1 text-[15px] font-mono content-center ml-5" type="submit">Check  </button>
 
+        </div>
+          {refreshFetching? <p class="text-1xl  text-center m-10">Rechecking in progress ....</p> : null}
 
         <div class="grid grid-cols-5">
         <div class="col-span-1"></div>
