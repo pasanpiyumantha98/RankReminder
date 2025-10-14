@@ -5,6 +5,8 @@ import { useState } from 'react';
 
 function Signup(){
 
+    const [Username,setUsername] = useState("");
+    const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [cpassword,setCPassword] = useState("");
 
@@ -32,12 +34,13 @@ return(
         <p class="mt-3 text-center">Have an account? <Link to="/login">Login!</Link></p>
         <form class="mt-5" >
             <div class="mb-6 mx-10">    
-            <label for="email" class="block mb-1 text-sm font-medium text-gray-900">Your Name</label>
-            <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>      
+            <label for="email" class="block mb-1 text-sm font-medium text-gray-900">Your Username</label>
+            <input onChange={e => setUsername(e.target.value)} type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" required/>      
+            {Username.includes(" ")? <p class="text-red-500">Username cannot contain spaces</p> : Username.length<8 && Username!="" ? <p class="text-red-500">Username must be at least 8 characters long</p> : null}
             </div>
             <div class="mb-6 mx-10">    
             <label for="email" class="block mb-1 text-sm font-medium text-gray-900">Your Email</label>
-            <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>      
+            <input onChange={e=> setEmail(e.target.value)} type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>      
             </div>
             <div class="mb-6 mx-10">
             <label for="password" class="block mb-1 text-sm font-medium text-gray-900">Your Password</label>
