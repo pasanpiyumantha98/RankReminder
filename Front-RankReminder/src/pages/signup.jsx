@@ -1,6 +1,12 @@
 import img from '../assets/img/1logo.png';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+
 
 function Signup(){
+
+    const [password,setPassword] = useState("");
+    const [cpassword,setCPassword] = useState("");
 
 return(
 
@@ -22,7 +28,8 @@ return(
     
     
     <div>
-        <h1 class="text-3xl text-center font-bold mt-20">Register</h1>
+        <h1 class="text-3xl text-center font-bold mt-10">Register</h1>
+        <p class="mt-3 text-center">Have an account? <Link to="/login">Login!</Link></p>
         <form class="mt-5" >
             <div class="mb-6 mx-10">    
             <label for="email" class="block mb-1 text-sm font-medium text-gray-900">Your Name</label>
@@ -34,11 +41,12 @@ return(
             </div>
             <div class="mb-6 mx-10">
             <label for="password" class="block mb-1 text-sm font-medium text-gray-900">Your Password</label>
-            <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>
+            <input onChange={e => setPassword(e.target.value)}  type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>
             </div>
             <div class="mb-6 mx-10">
-            <label for="password" class="block mb-1 text-sm font-medium text-gray-900">Re-enter Password</label>
-            <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>
+            <label for="password" class="block mb-1 text-sm font-medium text-gray-900">Re-enter Password </label>
+            <input onChange={e => setCPassword(e.target.value)} type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>
+            {password!=cpassword? <p class="text-red-500">Passwords don't match!</p> : null}
             </div>
             <div class="flex items-start mb-6 mx-10">
             <div class="flex items-center h-5">
