@@ -1,6 +1,10 @@
 import img from '../assets/img/1logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function Signup(){
@@ -9,6 +13,55 @@ function Signup(){
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [cpassword,setCPassword] = useState("");
+
+
+    
+        const { mutateAsync:regUser, isPending } = useMutation({
+    mutationFn: async () => {const res = await axios.post('http://localhost:3000/api/user/insert', {
+        username:Username,
+        email:email,
+        password:password,
+      });
+      return res.data; // 'UnameExists' | 'EmailExists' | 'success'
+    },
+  });
+ 
+
+    async function registerUser(e){
+        e.preventDefault();
+
+        if(Username === "" || email === "" || password === "" || cpassword === ""){
+            toast.error("All fields are required");
+            return;
+        } else if(Username.includes(" ")){
+           toast.error("Username cannot contain spaces");
+            return;
+        } else if(Username.length < 8){
+            toast.error("Username must be at least 8 characters long");
+            return;
+        } else if(password !== cpassword){
+            toast.error("Passwords don't match");
+            return;
+        } else if(password.length < 8){
+            toast.error("Password must be at least 8 characters long");
+            return;
+        } else {
+          const stat = await regUser();
+
+            if(stat === 'UnameExists'){
+                toast.error("Username already exists");  
+                return;
+            } else if(stat === 'EmailExists'){
+                toast.error("Email already registered");
+                return;
+            } else if(stat === 'success'){
+                toast.success("User registered successfully");
+                window.location.href = "/login";
+            }
+        }
+
+
+    }
 
 return(
 
@@ -52,12 +105,10 @@ return(
             {password!=cpassword? <p class="text-red-500">Passwords don't match!</p> : null}
             </div>
             <div class="flex items-start mb-6 mx-10">
-            <div class="flex items-center h-5">
-            <input id="remember" type="checkbox" value="" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300"></input>
+           
+          
             </div>
-            <label for="remember" class="ml-2 text-sm font-medium text-gray-900">Remember me</label>
-            </div>
-            <button type="submit" class="block mx-auto  text-white bg-black hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-100 sm:w-auto px-5 py-2.5 text-center  ">Sign Up</button>
+            <button onClick={registerUser} type="submit" class="block mx-auto  text-white bg-black hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-100 sm:w-auto px-5 py-2.5 text-center  ">Sign Up</button>
         </form>
     
     </div>

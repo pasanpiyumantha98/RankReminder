@@ -9,10 +9,10 @@ const router = express.Router();
 // Registering Users
 router.post('/insert', (req, res) => {
 
-    const fname = req.body.fname;
-    const lname = req.body.lname;
+    const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
+
 
 
     async function insertUser() {
@@ -28,9 +28,21 @@ router.post('/insert', (req, res) => {
                  id = lastUser[0].id + 1 || 1;
         }
 
-        await db.collection("Users").insertOne({id:id, fname:fname, lname:lname, tier:"Free", email:email, password:password});
+        const userExsists = await db.collection("Users").findOne({username: username});
+        if(userExsists) {
+            res.send('UnameExists');
+            return;
+        }
 
-        res.send('User inserted successfully');
+        const emailExists = await db.collection("Users").findOne({email: email});
+        if(emailExists) {
+            res.send('EmailExists');
+            return;
+        }
+
+        await db.collection("Users").insertOne({id:id, username:username, email:email, tier:"Free", password:password});
+
+        res.send('success');
 
     }
 
