@@ -6,7 +6,7 @@ import { useState } from "react";
 function UrlListWithRanks() {
 
 
-    const [uid,setUid] = useState("12345"); 
+    const [uid,setUid] = useState(localStorage.getItem('uid') || ''); 
 
     const {data : urlData,isFetching : urlFetching, refetch:urlsRefetch} = useQuery({
 
@@ -33,7 +33,7 @@ function UrlListWithRanks() {
         const {data : refreshData, isFetching : refreshFetching, refetch : refetchURL} = useQuery({
           queryKey:['RankCheckHome'],
           queryFn: async () => {
-              const res = await axios.get('http://localhost:3000/api/url/rank/check/home/12345');
+              const res = await axios.get(`http://localhost:3000/api/url/rank/check/home/${uid}`);
                window.location.reload();
                
           },

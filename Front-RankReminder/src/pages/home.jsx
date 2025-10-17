@@ -16,6 +16,9 @@ function Home() {
   const [rank,setRank] = useState("1");
   const[title,setTitle] = useState("My Website");
   const[site,setSite] = useState("www.mywebsite.com");
+  const [uname, setUname] = useState(localStorage.getItem('username') || '');
+  const [tier, setTier] = useState(localStorage.getItem('tier') || 'free');
+  const [uid, setUid] = useState(localStorage.getItem('uid') || '');
 
     const {data,isFetching,refetch} = useQuery({
         queryKey:['RankCheckManual', { url:url, query:query, location:location }],
@@ -54,6 +57,7 @@ function Home() {
     <div>
 
       <Header/> 
+    
 
      <h1 class="font-bold text-4xl mt-7 text-center">My Dashboard</h1>
 
@@ -64,7 +68,7 @@ function Home() {
 
       <div class="col-span-1"></div>
 
-      <div class="col-span-2 bg-gray-300 border-4 border-black p-3 rounded-2xl overflow-x-auto">
+      <div class="col-span-2 bg-gray-300 border-3 border-black p-3 rounded-2xl overflow-x-auto">
 
        <h2 class="text-2xl font-semibold text-center pb-3">Find SERP Rankings</h2>
         
@@ -121,7 +125,7 @@ function Home() {
 
       </div>
 
-      <div class="col-span-2 bg-gray-200 border-4 border-black p-3 rounded-2xl overflow-x-auto">
+      <div class="col-span-2 bg-gray-200 border-3 border-black p-3 rounded-2xl overflow-x-auto">
 
      <h2 class="text-3xl text-center mt-2 mb-10">Your Rank on Google is {rank}#</h2>
 

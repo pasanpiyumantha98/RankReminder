@@ -79,7 +79,7 @@ if(!passMatch)
     return res.send('WrongPass');
 }
 else{
-    return res.send({status:'success', username:user.username, tier:user.tier});    
+    return res.send({status:'success', username:user.username, tier:user.tier, id:user.id});    
 }
 
 }

@@ -41,6 +41,11 @@ function Login(){
                 return;
             } else if(stat.status === 'success'){
                 toast.success("Login successful");
+
+                localStorage.setItem('username', stat.username);
+                localStorage.setItem('tier', stat.tier);
+                localStorage.setItem('uid', stat.id);
+
                 window.location.href = "/dashboard";
             }
 
@@ -80,11 +85,11 @@ return(
             </div>
             <div class="mb-6 mx-10">
             <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Your password</label>
-            <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>
+            <input type="password" onChange={e => setPassword(e.target.value)}  id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder=""/>
                         </div>
             <div class="flex items-start mb-6 mx-10">
             <div class="flex items-center h-5">
-            <input onChange={e => setPassword(e.target.value)} id="remember" type="checkbox" value="" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300"></input>
+            <input id="remember" type="checkbox" value="" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300"></input>
             </div>
            
             </div>

@@ -12,7 +12,7 @@ function LinksManager() {
   const [url, setUrl] = useState("");
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");   
-  const[uid,setUid] = useState("12345");  // Temporary UID for testing purpose
+  const[uid,setUid] = useState(localStorage.getItem('uid') || "No");  // Temporary UID for testing purpose
   const [urlList,setUrlList] = useState([]);
   
 
