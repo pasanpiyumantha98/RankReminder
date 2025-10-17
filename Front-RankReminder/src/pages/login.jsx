@@ -1,12 +1,55 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import img from '../assets/img/1logo.png';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login(){
 
 
     const [password,setPassword] = useState("");
     const [email,setEmail] = useState("");
+
+
+    const{ mutateAsync:logUser, isPending } = useMutation({
+        mutationFn: async () =>{
+            const res = await axios.post('http://localhost:3000/api/user/login', {
+                email:email,
+                password:password,
+                });
+            return res.data; // 'NoUser' | 'WrongPass' | {status:'success', username:user.username, tier:user.tier}
+        }
+
+    })
+
+
+    async function login(e){
+        e.preventDefault();
+
+        if(email == " " || password == " "){
+            toast.error("All fields are required");
+            return;
+        } else {
+            const stat = await logUser();   
+            if(stat === 'NoUser'){
+                toast.error("No user found with this email");  
+                return;
+            } else if(stat === 'WrongPass'){
+                toast.error("Incorrect password");
+                return;
+            } else if(stat.status === 'success'){
+                toast.success("Login successful");
+                window.location.href = "/dashboard";
+            }
+
+        }
+
+
+    }
+
+
 
 return(
 
@@ -45,7 +88,7 @@ return(
             </div>
            
             </div>
-            <button type="submit" class="text-white bg-black hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-100 sm:w-auto px-5 py-2.5 text-center block mx-auto ">Login to your account</button>
+            <button onClick={login} type="submit" class="text-white bg-black hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-100 sm:w-auto px-5 py-2.5 text-center block mx-auto ">Login to your account</button>
         </form>
     
     </div>

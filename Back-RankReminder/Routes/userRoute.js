@@ -1,10 +1,12 @@
 import express from 'express';
 import getDb from '../db.js';
-import bycrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const db = await getDb();
 
 const router = express.Router();
+
+
 
 
 // Registering Users
@@ -41,7 +43,7 @@ router.post('/insert', (req, res) => {
             return;
         }
 
-        const hasshedPass = await bycrypt.hash(password, 10);
+        const hasshedPass = await bcrypt.hash(password, 10);
 
         await db.collection("Users").insertOne({id:id, username:username, email:email, tier:"Free", password:hasshedPass});
 
@@ -70,7 +72,7 @@ if(!user)
     return res.send('NoUser');
 }
 
-const passMatch = await bycrypt.compare(password, user.password);
+const passMatch = await bcrypt.compare(password, user.password);
 
 if(!passMatch)
 {
