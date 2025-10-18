@@ -235,7 +235,7 @@ function Account() {
         <p clas="m-3">Please type "Deactivate My Account" and click</p>
         <input
           type="text"
-          placeholder="Confirm New Password"
+          placeholder="Enter the challange"
           className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-amber-400"
           required
           onChange={e=> setdeactivateCheck(e.target.value)}
