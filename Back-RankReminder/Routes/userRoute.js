@@ -109,7 +109,59 @@ router.get('/details/:uid', (req,res)=>{
     })
 
 
+router.post('/change/password', (req,res)=>{
 
+    const cpass = req.body.cpass;
+    const npass = req.body.npass;
+    const uid = parseInt(req.body.uid);
+
+
+    async function changePassword() {
+
+        const user = await db.collection("Users").findOne({id: uid});
+
+        const passmatch = await bcrypt.compare(cpass, user.password);
+
+        if(!passmatch)
+        {
+            return res.send('WrongPass');
+        }
+        else{
+            const hasshedPass = await bcrypt.hash(npass, 10);
+            await db.collection("Users").updateOne({id:uid},{$set:{password:hasshedPass}});
+
+        }
+
+        
+
+        return res.send('success');
+
+
+    }    
+    changePassword();
+
+
+})
+
+
+router.post('/deactivate/account', async(req,res)=>{
+
+    const uid = req.body.uid;
+
+
+    async function deleteAcc()
+    {
+        await db.collection("Users").deleteOne({id:parseInt(uid)});
+
+        await db.collection("Urls").deleteMany({uid:uid});
+
+        return res.send('success');
+
+    }
+
+    deleteAcc();
+
+})
 
 
 

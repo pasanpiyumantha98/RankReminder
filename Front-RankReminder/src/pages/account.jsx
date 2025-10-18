@@ -4,7 +4,9 @@ import pro from '../assets/img/pro.png';
 import free from '../assets/img/free.png';
 import { useState } from "react";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery,useMutation } from "@tanstack/react-query";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -25,6 +27,8 @@ function Account() {
   const [currentPass, setCurrentPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmNewPass, setConfirmNewPass] = useState("");
+
+  const [deactivateCheck, setdeactivateCheck] = useState("");
 
   const style = {
   position: "absolute",
@@ -62,6 +66,54 @@ function Account() {
   })
 
   const creditsLeft = UserData ? UserData.credits : 0;
+
+  const { mutateAsync:changePass } = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post('http://localhost:3000/api/user/change/password', {uid:uid, cpass:currentPass, npass:newPass});
+      return res.data; 
+    }});
+
+  async function loginSubmit(e){
+    e.preventDefault();
+    if(newPass !== confirmNewPass){
+      toast.error("New Password and Confirm New Password do not match.");
+      return;
+    }
+    const stat = await changePass();
+
+    if(stat === 'WrongPass'){  
+      toast.error("Current Password is incorrect.");
+      return;
+    } else if(stat === 'success'){
+      toast.success("Password changed successfully.");
+      setPassHandleClose();
+    }
+
+  }
+
+  const {mutateAsync:deactivateAccount} = useMutation({
+    mutationFn : async () =>{ 
+      const res = await axios.post('http://localhost:3000/api/user/deactivate/account', {uid:uid});
+      return res.data;
+    }});
+
+  async function deactivateSubmit(e){
+    e.preventDefault();
+
+    if(deactivateCheck !== "Deactivate My Account"){
+      toast.error("Challange does not match!");
+      return;
+    }
+    const stat = await deactivateAccount();
+    if(stat === 'success'){
+      toast.success("Account deactivated successfully.");
+      localStorage.clear();
+      window.location.href = "/";
+    }
+
+  }
+
+  
 
 
   return (
@@ -148,6 +200,7 @@ function Account() {
           Cancel
         </button>
         <button
+          onClick={loginSubmit}
           type="submit"
           className="px-4 py-2 rounded-lg bg-black text-white hover:bg-amber-500"
         >
@@ -167,10 +220,48 @@ function Account() {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2" clas="text-center">
-           You are about to deactivate your account!
+           Deactivation!
           </Typography>
-          <button class="ml-30 mt-3 bg-black rounded-2xl hover:bg-red-500 text-amber-50 p-2 text-[11px] font-mono content-center" >Click to Proceed</button>
-        </Box>
+
+           <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        // 👉 Handle password change logic here
+        console.log("Password changed!");
+        handleClose();
+      }}
+    >
+      <div className="flex flex-col space-y-3">
+        <p clas="m-3">Please type "Deactivate My Account" and click</p>
+        <input
+          type="text"
+          placeholder="Confirm New Password"
+          className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-amber-400"
+          required
+          onChange={e=> setdeactivateCheck(e.target.value)}
+        />
+      </div>
+      {deactivateCheck=="Deactivate My Account" ? null : <p class="text-red-500 mt-2">Challange does not match!</p>}
+
+      <div className="flex justify-end space-x-3 mt-5">
+        <button
+          type="button"
+          onClick={handleClose}
+          className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-black"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={deactivateSubmit}
+          type="submit"
+          className="px-4 py-2 rounded-lg bg-black text-white hover:bg-amber-500"
+        >
+          Deactivate
+        </button>
+      </div>
+    </form>
+         
+            </Box>
       </Modal>
    
     </div>
