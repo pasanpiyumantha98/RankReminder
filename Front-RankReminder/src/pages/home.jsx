@@ -18,7 +18,7 @@ function Home() {
   const [rank,setRank] = useState("1");
   const[title,setTitle] = useState("My Website");
   const[site,setSite] = useState("www.mywebsite.com");
-  const[snippet,setSnippet] = useState("This is my website snippet");
+  const[snippet,setSnippet] = useState("Your Meta Description Snippet will appear here.");
   const [uname, setUname] = useState(localStorage.getItem('username') || '');
   const [tier, setTier] = useState(localStorage.getItem('tier') || 'free');
   const [uid, setUid] = useState(localStorage.getItem('uid') || '');

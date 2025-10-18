@@ -84,7 +84,7 @@ return(
     
     <div>
         <h1 class="text-3xl text-center font-bold mt-10">Register</h1>
-        <p class="mt-3 text-center">Have an account? <Link to="/login">Login!</Link></p>
+        <p class="mt-3 text-center">Have an account? <Link to="/">Login!</Link></p>
         <form class="mt-5" >
             <div class="mb-6 mx-10">    
             <label for="email" class="block mb-1 text-sm font-medium text-gray-900">Your Username</label>
