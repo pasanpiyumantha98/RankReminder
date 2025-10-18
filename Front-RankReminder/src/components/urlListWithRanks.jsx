@@ -45,7 +45,7 @@ function UrlListWithRanks() {
 
           
            
-
+        const lastChek = urlData && urlData.length>0 ? new Date(urlData[0].lastChecked).toLocaleString() : 'No Data';
 
      
 
@@ -54,8 +54,8 @@ function UrlListWithRanks() {
         <div class=" bg-gray-300">
             <h2 class="text-2xl font-black text-center ">Your Rankings</h2>
 
-        <div class="flex justify-center">
-            <p class="text-center ">Last Checked - </p> {urlFetching? <p classs="mt-3">Loading</p> : <p classs="mt-5"> {urlData[0].lastChecked}</p>} 
+        <div class="flex justify-center mt-3">
+            <p class="text-center">Last Checked - </p> {urlFetching? <p class="">Loading</p> : <p class=""> {lastChek }</p>} 
             <button onClick={refetchURL} class=" bg-black rounded-3xl hover:bg-amber-500 text-amber-50 p-1 text-[15px] font-mono content-center ml-5" type="submit">Check  </button>
 
         </div>
@@ -93,7 +93,7 @@ function UrlListWithRanks() {
         <td class="px-6 py-4 whitespace-nowrap text-center">{item.nrank>item.prank?"Down":item.nrank==item.prank?"No Change":item.nrank<item.prank?"Up":"NA"}</td>
       </tr> 
         
-         ))) : <p class="text-center text-lg ">No URLs Found</p>
+         ))) :<center> <p class="text-center text-lg ">No URLs Found</p></center>
 
 
         }

@@ -89,6 +89,7 @@ router.post("/rank/check/manual", async (req, res) => {
     const query = String(req.body.query || "").trim();
     const gl = String(req.body.location || "us").toLowerCase(); // e.g. "lk"
     const targetUrl = String(req.body.url || "").trim();
+    const uid = parseInt(req.body.uid);
 
     if (!query || !targetUrl) {
       return res.status(400).json({ error: "query and url are required" });
@@ -148,6 +149,17 @@ router.post("/rank/check/manual", async (req, res) => {
       return serp;
     };
 
+    const user = await db.collection("Users").findOne({id:uid});
+
+    
+
+    const  newCredits = user?.credits - 1;
+
+    await db.collection("Users").updateOne(
+      { id: uid },
+      {$set: { credits: newCredits }}
+    );
+
     for (let start = 0; start < MAX_RESULTS; start += PAGE_SIZE) {
       // Primary attempt: offset-based pagination
       let serp = await fetchPage({ start });
@@ -179,6 +191,7 @@ router.post("/rank/check/manual", async (req, res) => {
           page: Math.floor((rank - 1) / PAGE_SIZE) + 1,
           link: item.link,
           title: item.title,
+          snippet : item.snippet,
         });
       }
 
@@ -200,7 +213,20 @@ router.get('/rank/check/home/:uid', async (req, res) => {
 
 const uid = req.params.uid;  
 
+const uidd = parseInt(uid);
+
 const urls = await db.collection("Urls").find({uid:uid}).toArray();
+
+ //Update user credits
+    
+    const user = await db.collection("Users").findOne({id:uidd});
+    const  newCredits = user?.credits - urls.length;
+
+    await db.collection("Users").updateOne(
+      { id: uidd },
+      {$set: { credits: newCredits }}
+    );
+    //
 
 if(urls.length === 0)
 {
@@ -244,6 +270,8 @@ for (const urlObj of urls) {
         return String(u).trim().toLowerCase();
       }
     };
+
+   
 
     const targetKey = toKey(targetUrl);
     const isMatch = (candidate) => {

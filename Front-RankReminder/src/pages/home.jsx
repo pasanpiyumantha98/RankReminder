@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import UrlListWithRanks from "../components/urlListWithRanks";
+import loadinggif from '../assets/img/loading.gif';
+
 
 function Home() {
 
@@ -16,6 +18,7 @@ function Home() {
   const [rank,setRank] = useState("1");
   const[title,setTitle] = useState("My Website");
   const[site,setSite] = useState("www.mywebsite.com");
+  const[snippet,setSnippet] = useState("This is my website snippet");
   const [uname, setUname] = useState(localStorage.getItem('username') || '');
   const [tier, setTier] = useState(localStorage.getItem('tier') || 'free');
   const [uid, setUid] = useState(localStorage.getItem('uid') || '');
@@ -23,7 +26,7 @@ function Home() {
     const {data,isFetching,refetch} = useQuery({
         queryKey:['RankCheckManual', { url:url, query:query, location:location }],
         queryFn: async () => {
-          const res = await axios.post('http://localhost:3000/api/url/rank/check/manual', {url:url, query:query, location:location});
+          const res = await axios.post('http://localhost:3000/api/url/rank/check/manual', {url:url, query:query, location:location, uid:uid});
           return res.data;},
           enabled: false
 
@@ -46,6 +49,7 @@ function Home() {
   setRank(fresh.rank);
   setSite(fresh.link);
   setTitle(fresh.title);
+  setSnippet(fresh.snippet);
 
     }
     
@@ -127,11 +131,16 @@ function Home() {
 
       <div class="col-span-2 bg-white border-black p-3 rounded-2xl overflow-x-auto">
 
-     <h2 class="text-3xl text-center mt-2 mb-10">Your Rank on Google is {rank}#</h2>
+    {isFetching ? (<><h2 class="text-center mt-4 text-2xl">Checking...</h2><img src={loadinggif} class="ml-28"></img></>) : 
+    
+    ( <><h2 class="text-2xl text-center mt-3 mb-10">Your Rank on Google is {rank}#</h2>
 
        <p class=" mb-1 font-bold text-center">{title}</p>
 
        <p class=" mb-1 text-center">{site}</p>
+       
+        <p class=" mb-1 text-center rounded-3xl bg-amber-50">{snippet}</p>
+        </>) }
 
 
       </div>

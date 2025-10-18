@@ -2,10 +2,7 @@ import icon from '../assets/img/icon.png';
 import user from '../assets/img/user.png';
 import { useState } from 'react';
 
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+
 
 
 function Header() {
@@ -18,7 +15,7 @@ function Header() {
   function logout(){
 
     localStorage.clear();
-    window.location.href = "/login";
+    window.location.href = "/";
 
   }
 
