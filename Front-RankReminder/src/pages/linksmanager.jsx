@@ -88,23 +88,23 @@ async function registerUrl(e){
     <div>
         <Header/>
 
-        <h1 class="font-bold text-4xl mt-7 text-center">Links Manager</h1>
+        <h1 class="font-bold text-4xl pt-7 text-center bg-gray-300">Links Manager</h1>
       
-      <div class="grid grid-cols-3 m-10 p-10 ">
+      <div class="grid grid-cols-3  p-10 bg-gray-300">
        
        <div></div>
-       <div class="bg-gray-200 border-4 border-black p-3 rounded-2xl">
-        <h2 class="text-2xl font-semibold content-center pb-3 text-center">Submit New Links</h2>
+       <div class="bg-white border-black p-3 rounded-2xl">
+        <h2 class="text-2xl font-semibold content-center pb-3 text-center">Create New Links</h2>
         
         <form  method="POST">
         
         
         <label for="url" class="text-xl mr-15">Url </label>
-        <input value={url} onChange={e => setUrl(e.target.value)} id="url" class="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="https://example.com" required />
+        <input value={url} onChange={e => setUrl(e.target.value)} id="url" class="bg-gray-100 p-2 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="https://example.com" required />
 
          <br/>
         <label for="url" class="text-xl mr-3">Keyword </label>
-        <input value={query} onChange={e=> setQuery(e.target.value)} id="url" class="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="GTA 6, Mods, Serp...." required />
+        <input value={query} onChange={e=> setQuery(e.target.value)} id="url" class="bg-gray-100 p-2 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="GTA 6, Mods, Serp...." required />
 
          <br/>
         <label for="url" class="text-xl mr-5">Country </label>
@@ -113,7 +113,7 @@ async function registerUrl(e){
   name="country"
   value={location}
   onChange={(e) => setLocation(e.target.value)}
-  className="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"
+  className="bg-gray-100 p-2 rounded-2xl hover:bg-white m-2 w-60"
   required
 >
   <option value="">Select country</option>
@@ -138,7 +138,7 @@ async function registerUrl(e){
 
       </div>
 
-      <div class="grid grid-cols-5">
+      <div class="grid grid-cols-5 bg-gray-300">
 
 
       <div class="col-span-1"></div>

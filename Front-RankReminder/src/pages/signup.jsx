@@ -56,7 +56,7 @@ function Signup(){
                 return;
             } else if(stat === 'success'){
                 toast.success("User registered successfully");
-                window.location.href = "/login";
+                window.location.href = "/";
             }
         }
 

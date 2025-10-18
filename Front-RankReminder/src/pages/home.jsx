@@ -59,41 +59,41 @@ function Home() {
       <Header/> 
     
 
-     <h1 class="font-bold text-4xl mt-7 text-center">My Dashboard</h1>
+     <h1 class="font-bold text-4xl  text-center pt-10  bg-gray-300">My Dashboard</h1>
 
-     <h2 class="text-2xl font-bold text-center mt-20">Rank Checker</h2>
+     <h2 class="text-2xl font-bold text-center pt-10  bg-gray-300">Rank Checker</h2>
 
 
-     <div class="grid grid-cols-6 m-5 p-10 space-x-5">
+     <div class="grid grid-cols-6 p-10 space-x-5 bg-gray-300 ">
 
       <div class="col-span-1"></div>
 
-      <div class="col-span-2 bg-gray-300 border-3 border-black p-3 rounded-2xl overflow-x-auto">
+      <div class="col-span-2 bg-white  border-black p-3 rounded-2xl overflow-x-auto">
 
        <h2 class="text-2xl font-semibold text-center pb-3">Find SERP Rankings</h2>
         
         <div class="grid grid-cols-4  p-1">
         
-        <div class=" col-span-3 bg-gray-300 ">
+        <div class=" col-span-3 bg-white ">
         
         <form action="/api/tracks" method="POST">
         
         
-        <label for="url" class="text-xl mr-10">URL </label>
-        <input id="url" value={url} onChange={e =>setUrl(e.target.value)} class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="https://example.com" required />
+        <label for="url" class=" mr-10">URL </label>
+        <input id="url" value={url} onChange={e =>setUrl(e.target.value)} class="bg-gray-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="https://example.com" required />
 
          <br/>
-        <label for="url" class="text-xl ">Keyword </label>
-         <input id="url" value={query} onChange={e => setQuery(e.target.value)} class="bg-amber-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="GTA 6, Mods, Serp...." required />
+        <label for="url" class=" ">Keyword </label>
+         <input id="url" value={query} onChange={e => setQuery(e.target.value)} class="bg-gray-100 p-1 rounded-2xl hover:bg-white m-2 w-60"  name="url" type="url" placeholder="GTA 6, Mods, Serp...." required />
 
          <br/>
-        <label for="url" class="text-xl ">Location </label>
+        <label for="url" class=" ">Location </label>
         <select 
           id="country"
   name="country"
   value={location}
   onChange={(e) => setLocation(e.target.value)}
-  className="bg-amber-100 p-2 rounded-2xl hover:bg-white m-2 w-60"
+  className="bg-gray-100 p-2 rounded-2xl hover:bg-white m-2 w-60"
   required
 >
   <option value="">Select country</option>
@@ -115,7 +115,7 @@ function Home() {
 
        </div>
 
-       <div class=" col-span-1 bg-gray-300 ">
+       <div class=" col-span-1 bg-white ">
       <button onClick={rankCheckManual} class=" mt-10 bg-black rounded-3xl hover:bg-amber-500 text-amber-50 p-2 text-[20px] font-mono content-center" type="submit">Find  </button>
 
        </div>
@@ -125,7 +125,7 @@ function Home() {
 
       </div>
 
-      <div class="col-span-2 bg-gray-200 border-3 border-black p-3 rounded-2xl overflow-x-auto">
+      <div class="col-span-2 bg-white border-black p-3 rounded-2xl overflow-x-auto">
 
      <h2 class="text-3xl text-center mt-2 mb-10">Your Rank on Google is {rank}#</h2>
 

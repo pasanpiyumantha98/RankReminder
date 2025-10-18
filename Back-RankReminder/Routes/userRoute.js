@@ -45,7 +45,7 @@ router.post('/insert', (req, res) => {
 
         const hasshedPass = await bcrypt.hash(password, 10);
 
-        await db.collection("Users").insertOne({id:id, username:username, email:email, tier:"Free", password:hasshedPass});
+        await db.collection("Users").insertOne({id:id, username:username, email:email, tier:"Free", password:hasshedPass, credits:150});
 
         res.send('success');
 
@@ -89,6 +89,24 @@ loginUser();
 
 
 })
+
+
+router.get('/details/:uid', (req,res)=>{
+
+    const uid = parseInt(req.params.uid);
+
+    async function getUserDetails() {
+
+    const user = await db.collection("Users").findOne({id: uid});
+
+        return res.send(user);
+
+    }
+    
+    getUserDetails();   
+
+
+    })
 
 
 

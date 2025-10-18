@@ -51,8 +51,8 @@ function UrlListWithRanks() {
 
 
     return (
-        <div>
-            <h2 class="text-2xl font-black text-center m-10">Your Rankings</h2>
+        <div class=" bg-gray-300">
+            <h2 class="text-2xl font-black text-center ">Your Rankings</h2>
 
         <div class="flex justify-center">
             <p class="text-center ">Last Checked - </p> {urlFetching? <p classs="mt-3">Loading</p> : <p classs="mt-5"> {urlData[0].lastChecked}</p>} 
